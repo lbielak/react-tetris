@@ -1,0 +1,4 @@
+FROM tetris:latest
+WORKDIR ./../react-tetris
+RUN npm install --save-dev mocha
+RUN npm test

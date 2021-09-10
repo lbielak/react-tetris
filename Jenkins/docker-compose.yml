@@ -1,1 +1,16 @@
--
+version: '3.3'
+services:
+  build-agent:
+    container_name: tetris
+    image: tetris:latest
+    build:
+      context: .
+      dockerfile: DockerfileB
+  test-agent:
+    container_name: testetris
+    image: testetris:latest
+    build:
+      context: .
+      dockerfile: DockerfileT
+    depends_on:
+    - build-agent  
