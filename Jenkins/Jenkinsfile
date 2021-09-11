@@ -34,10 +34,12 @@ pipeline {
                         to: 'ukaszbielak@gmail.com'
                 }
                 failure {
+                    echo 'Tests failed aborting...'
                     emailext attachLog: true,
                         subject: "Pipeline ${env.JOB_NAME} tests failed",
                         body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
                         to: 'ukaszbielak@gmail.com'
+                    error('Aborting due to failed tests')
                 }
             }
         }
