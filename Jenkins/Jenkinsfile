@@ -28,7 +28,8 @@ pipeline {
             }
             post {
                 success {
-                    emailext subject: "Pipeline ${env.JOB_NAME} tests succeded",
+                    emailext attachLog: true,
+                        subject: "Pipeline ${env.JOB_NAME} tests succeded",
                         body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
                         to: 'ukaszbielak@gmail.com'
                 }
