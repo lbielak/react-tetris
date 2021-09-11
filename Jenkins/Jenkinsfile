@@ -4,19 +4,60 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Check if newest'
-                sh 'ls'
+                echo 'Budowanie - latest version'
+                sh 'docker build -t build . -f DockerfileB'
+            }
+            post {
+                success {
+                    emailext subject: "Pipeline ${env.JOB_NAME} build succeded",
+                        body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
+                        to: 'ukaszbielak@gmail.com'
+                }
+                failure {
+                    emailext attachLog: true,
+                        subject: "Pipeline ${env.JOB_NAME} build failed",
+                        body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
+                        to: 'ukaszbielak@gmail.com'
+                }
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testowanie'
+                sh 'docker build -t test . -f DockerfileT'
+            }
+            post {
+                success {
+                    emailext subject: "Pipeline ${env.JOB_NAME} tests succeded",
+                        body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
+                        to: 'ukaszbielak@gmail.com'
+                }
+                failure {
+                    emailext attachLog: true,
+                        subject: "Pipeline ${env.JOB_NAME} tests failed",
+                        body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
+                        to: 'ukaszbielak@gmail.com'
+                }
             }
         }
-        stage('Deploy') {
+         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploy'
+                sh 'docker run -d build'
             }
-        }
+            post {
+                success {
+                    emailext subject: "Pipeline ${env.JOB_NAME} deploy succeded",
+                        body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
+                        to: 'ukaszbielak@gmail.com'
+                }
+                failure {
+                    emailext attachLog: true,
+                        subject: "Pipeline ${env.JOB_NAME} deploy failed",
+                        body: "Job ${env.JOB_NAME} ${currentBuild.currentResult}: build ${env.BUILD_DISPLAY_NAME}",
+                        to: 'ukaszbielak@gmail.com'
+                }
+            }
+         }
     }
 }
