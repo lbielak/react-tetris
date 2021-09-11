@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Budowanie - latest version'
-                sh 'docker build --no-cache -t build . -f Jenkins/DockerfileB'
+                sh 'docker build -t build . -f Jenkins/DockerfileB'
             }
             post {
                 success {
@@ -24,7 +24,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testowanie'
-                sh 'docker build -t test . -f Jenkins/DockerfileT'
+                sh 'docker build --no-cache -t test . -f Jenkins/DockerfileT'
             }
             post {
                 success {
